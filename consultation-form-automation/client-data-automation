@@ -1,0 +1,341 @@
+{
+  "name": "Automation 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        16
+      ],
+      "id": "c09c23cf-45d4-4340-8d29-1846fbc2ab0e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1RTzTlBHz-TZKyPg7PPbCCYURUR4lpbMQh_EUZkMODmk",
+          "mode": "list",
+          "cachedResultName": "Automation 2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RTzTlBHz-TZKyPg7PPbCCYURUR4lpbMQh_EUZkMODmk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RTzTlBHz-TZKyPg7PPbCCYURUR4lpbMQh_EUZkMODmk/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -80,
+        16
+      ],
+      "id": "23b397fd-56c3-4a84-a7e3-3cd2d7ab6301",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sdXd09CSGgEvv3wp",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.genderize.io/?name=mohammad",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        16
+      ],
+      "id": "cc3c3f3f-9ed0-4fc1-ae13-22a65a3273c7",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "https://api.nationalize.io/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "ea0c1c8d-21a1-4b12-9cf9-b45b32985b63",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.agify.io/",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        688,
+        0
+      ],
+      "id": "6008a22a-bb89-4683-aa44-88327e67ff06",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1RTzTlBHz-TZKyPg7PPbCCYURUR4lpbMQh_EUZkMODmk",
+          "mode": "list",
+          "cachedResultName": "Automation 2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RTzTlBHz-TZKyPg7PPbCCYURUR4lpbMQh_EUZkMODmk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1RTzTlBHz-TZKyPg7PPbCCYURUR4lpbMQh_EUZkMODmk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID ": "={{ $('Get row(s) in sheet').item.json['ID '] }}",
+            "Name": "={{ $('Get row(s) in sheet').item.json.Name }}",
+            "Number": "={{ $('Get row(s) in sheet').item.json.Number }}",
+            "Budget": "={{ $('Get row(s) in sheet').item.json.Budget }}",
+            "Gender": "={{ $('HTTP Request').item.json.gender }}",
+            "Age": "={{ $json.age }}",
+            "Nationality": "={{$('HTTP Request1').item.json.country.first().country_id}}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "ID ",
+              "displayName": "ID ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Number",
+              "displayName": "Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Gender",
+              "displayName": "Gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nationality",
+              "displayName": "Nationality",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Age",
+              "displayName": "Age",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        944,
+        0
+      ],
+      "id": "7cb60c99-52a6-4bf1-b50d-f262f15e749d",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sdXd09CSGgEvv3wp",
+          "name": "Google Sheets account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "mohammad70623@gmail.com",
+        "subject": "New Client",
+        "emailType": "text",
+        "message": "=Hi mohammad.\nA new client \n {{ $json.Name }} has signed up, below are the details.\nNumber: {{ $json.Number }}\nBudget: {{ $json.Budget }}\n\nBelow are the expected gender age and nationality.\nGender:{{ $json.Gender }}\nAge: {{ $json.Age }}\nNationality: {{ $json.Nationality }}\n\nDo make sure to connect with him at {{ $json.Number }}\n\nThanks,\nYour awsome workflow\n",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1152,
+        0
+      ],
+      "id": "0b8f9959-bd26-4669-ba03-e4abd913fd79",
+      "name": "Send a message",
+      "webhookId": "09c1344e-3081-4751-bb43-9a09ed86df8d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "G80WFCCOY5sWyQHQ",
+          "name": "Gmail account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ce3e62ba-0707-4f4f-a86c-62816212dfd1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bf772102aaa24de2edf2faee9002f63e4a6efcf8262bbf982841a70931d12aaf"
+  },
+  "id": "deIgIH2Au3LTEq1W",
+  "tags": []
+}
